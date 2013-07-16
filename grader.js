@@ -48,7 +48,7 @@ var cheerioHtmlFile = function(htmlfile) {
 };
 
 var cheerioURLFile = function(urlfile) {
-//    return cheerioBuf(rest.get(urlfile, {decoding: "buffer"});
+    return cheerioBuf(rest.get(urlfile, {decoding: "buffer"}) );
 };
 
 
@@ -82,7 +82,7 @@ if(require.main == module) {
  
    var checkJson ;
 
-    if ( program.url) console.log(program.url);
+    if ( program.url)      checkJson = checkHtmlFile(cheerioURLFile, program.url, program.checks);
     else if (program.file) checkJson = checkHtmlFile(cheerioHtmlFile, program.file, program.checks);
 
     var outJson = JSON.stringify(checkJson, null, 4);
