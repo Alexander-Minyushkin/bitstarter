@@ -1,12 +1,16 @@
 var express = require('express');
 var fs = require('fs');
 var buf = require('buffer');
+var core = require('./core.js')
 
-var app = express.createServer(express.logger());
+var app = express(express.logger());
+
+app.get('/json-api/search', function(request, response) {
+   response.send( resque.getZoneID(0, 0) );
+});
+
 
 app.get('/', function(request, response) {
-  //response.send('Hello World2!');
-
    response.send( fs.readFileSync('index.html').toString() );
 });
 
