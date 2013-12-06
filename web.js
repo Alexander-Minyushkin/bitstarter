@@ -3,7 +3,7 @@ var fs = require('fs');
 var buf = require('buffer');
 var core = require('./core.js')
 
-var app = express(express.logger());
+var app = express.createServer(express.logger());
 
 app.get('/json-api/search', function(request, response) {
    response.send( resque.getZoneID(0, 0) );
