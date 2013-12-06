@@ -1,33 +1,46 @@
+var pg = require('pg');
+
 resque = new Object();
+
+resque.operation = new Object();
 
 resque.getZoneID = function(lat, lon) {
 	var tmp = {};
 	tmp.id = 0;
-	return JSON.stringify(tmp);
-}
+/*	if (this.operation.isEmpty()) {
+		console.log("Zero lengh");
 
-resque.getStatus = function(id) {
-        var tmp = {};
-        tmp.status = "Testing stub status";
-        return JSON.stringify(tmp);
-}
-
-resque.getDescription = function(id) {
-        var tmp = {};
-        tmp.descr = "Testing stub description";
-        return JSON.stringify(tmp);
+		return JSON.stringify(tmp);
+	}
+*/
+	return this.operation;
+	
 }
 
 
-resque.getImage = function (id) {
-        var tmp = {};
-        tmp.img = "Testing stub image";
-        return JSON.stringify(tmp);
-}
+//console.log (resque.getZoneID(0, 1).toString())
 
 
-console.log (resque.getZoneID(0, 1))
-console.log (resque.getStatus(0))
-console.log (resque.getDescription(0))
-console.log (resque.getImage(0))
+// Read info about current operations from DB
 
+readFromDB = function() {
+pg.connect(process.env.DATABASE_URL, function(err, client) {
+
+  if(err) {
+    return console.error('could not connect to postgres:', err);
+  }
+
+  var query = client.query('SELECT * FROM operation');
+
+  query.on('row', function(row) {
+
+    resque.operation = JSON.stringify(row);
+//    console.log(resque.getZoneID(0,0));
+    client.end();
+  }); 
+})
+};
+
+readFromDB();
+
+setInterval( readFromDB , 1000); 
