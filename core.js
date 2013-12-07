@@ -33,14 +33,15 @@ client.connect(function(err) {
   if(err) {
     return console.error('could not connect to postgres: ', err);
   }
-  client.query('SELECT * FROM operation', function(err, result) {
-    if(err) {
+  client.query('SELECT * FROM operation  WHERE status=1', 
+    function(err, result) {
+     if(err) {
       return console.error('error running query: ', err);
-    }
-    resque.operation = result.rows;
-    //console.log(resque.getZoneID(0,0));
-    client.end();
-  });
+     }
+     resque.operation = result.rows;
+     //console.log(resque.getZoneID(0,0));
+     client.end();
+    });
 });
 
 
