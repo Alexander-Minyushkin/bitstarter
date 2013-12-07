@@ -23,24 +23,27 @@ resque.getZoneID = function(lat, lon) {
 
 // Read info about current operations from DB
 
-readFromDB = function() {
-pg.connect(process.env.DATABASE_URL, function(err, client) {
+//console.log(process.env.DATABASE_URL);
 
+resque.readFromDB = function() {
+// TODO: do we really need to create new client every time?
+
+var client = new pg.Client(process.env.DATABASE_URL);
+client.connect(function(err) {
   if(err) {
-    return console.error('could not connect to postgres:', err);
+    return console.error('could not connect to postgres: ', err);
   }
-
-  var query = client.query('SELECT * FROM operation');
-
-  query.on('row', function(row) {
-
-    resque.operation = JSON.stringify(row);
-//    console.log(resque.getZoneID(0,0));
+  client.query('SELECT * FROM operation', function(err, result) {
+    if(err) {
+      return console.error('error running query: ', err);
+    }
+    resque.operation = result.rows;
+    //console.log(resque.getZoneID(0,0));
     client.end();
-  }); 
-})
+  });
+});
+
+
 };
 
-readFromDB();
-
-setInterval( readFromDB , 1000); 
+resque.readFromDB();

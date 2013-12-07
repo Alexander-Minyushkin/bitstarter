@@ -5,6 +5,8 @@ var core = require('./core.js')
 
 var app = express.createServer(express.logger());
 
+setInterval( resque.readFromDB, 1000);
+
 app.get('/json-api/search', function(request, response) {
    response.send( resque.getZoneID(0, 0) );
 });
