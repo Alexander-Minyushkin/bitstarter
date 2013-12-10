@@ -2,6 +2,23 @@
 
 {% include "head.html" %}
 
+<script src="http://api-maps.yandex.ru/1.1/index.xml?key=AMh9o1IBAAAAXvWgMwUAN3a_UVv9mH175xKXWObDW8Y4CAAAAAAAAAAAAACJnwQdBpVq0MFSP56dp9ZX7IG5Sw=="
+	type="text/javascript"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            var map = new YMaps.Map(document.getElementById("YMapsID"));
+            map.setCenter(new YMaps.GeoPoint(37.64, 55.76), 10);
+            
+            //map.addControl(new YMaps.TypeControl());
+            map.addControl(new YMaps.ToolBar());
+            map.addControl(new YMaps.Zoom());
+            map.addControl(new YMaps.Polygon());
+            map.addControl(new YMaps.ScaleLine());
+			map.addControl(new YMaps.SearchControl());
+        }
+    </script>
+
+
     <!-- We use row-fluid inside containers to achieve a resizable layout. -->
     <!-- blogs.endjin.com/2013/04/tips-for-implementing-responsive-designs-using-bootstrap/ -->
     <!-- http://stackoverflow.com/a/12270322 -->
