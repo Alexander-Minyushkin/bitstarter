@@ -7,7 +7,7 @@ var core = require('./core.js')
 
 var app = express.createServer(express.logger());
 
-nunjucks.configure('', {
+nunjucks.configure('views', {
     autoescape: true,
     express: app
 });
@@ -26,7 +26,8 @@ app.get('/', function(request, response) {
 });
 
 app.get('/administration', function(request, response) {
-   response.send( fs.readFileSync('administration.html').toString() );
+   //response.send( fs.readFileSync('administration.html').toString() );
+    response.render('administration.html');
 });
 
 
