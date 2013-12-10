@@ -5,8 +5,7 @@ var nunjucks = require('nunjucks')
 
 var core = require('./core.js')
 
-var app = express();
-//.createServer(express.logger());
+var app = express.createServer(express.logger());
 
 nunjucks.configure('', {
     autoescape: true,
