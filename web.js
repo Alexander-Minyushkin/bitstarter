@@ -1,9 +1,18 @@
 var express = require('express');
 var fs = require('fs');
 var buf = require('buffer');
+var nunjucks = require('nunjucks')
+
 var core = require('./core.js')
 
-var app = express.createServer(express.logger());
+var app = express();
+//.createServer(express.logger());
+
+nunjucks.configure('', {
+    autoescape: true,
+    express: app
+});
+
 
 setInterval( resque.readFromDB, 1000);
 
@@ -13,7 +22,8 @@ app.get('/json-api/search', function(request, response) {
 
 
 app.get('/', function(request, response) {
-   response.send( fs.readFileSync('index.html').toString() );
+   //response.send( fs.readFileSync('index.html').toString() );
+   response.render('index.html');
 });
 
 app.get('/administration', function(request, response) {
