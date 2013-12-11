@@ -31,6 +31,12 @@ app.get('/administration', function(request, response) {
 });
 
 
+//The 404 Route (ALWAYS Keep this as the last route)
+// http://stackoverflow.com/questions/6528876/how-to-redirect-404-errors-to-a-page-in-expressjs
+app.get('*', function(req, res){
+  res.send("Error 404. We don't have this page.", 404);
+});
+
 var port = process.env.PORT || 8080; //5000;
 app.listen(port, function() {
   console.log("Listening on " + port);
