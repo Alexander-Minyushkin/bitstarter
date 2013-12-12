@@ -5,7 +5,15 @@ var nunjucks = require('nunjucks')
 
 var core = require('./core.js')
 
-var app = express.createServer(express.logger());
+var app = express.createServer()
+
+app.configure(function(){
+	// Authentication support
+	// http://habrahabr.ru/post/145970/
+	app.use(express.cookieParser());
+	app.use(express.session({ secret: process.env.SECRET} ));
+	express.logger();
+});
 
 nunjucks.configure('views', {
     autoescape: true,
@@ -20,15 +28,17 @@ app.get('/json-api/search', function(request, response) {
 });
 
 
-app.get('/', function(request, response) {
+app.get('/', function(req, res) {
    //response.send( fs.readFileSync('index.html').toString() );
-   response.render('index.html');
+   res.render('index.html');
+   console.log(req.session);
 });
 
 app.get('/administration', function(request, response) {
    //response.send( fs.readFileSync('administration.html').toString() );
     response.render('administration.html');
 });
+
 
 
 //The 404 Route (ALWAYS Keep this as the last route)
