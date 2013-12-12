@@ -29,14 +29,12 @@ app.get('/json-api/search', function(request, response) {
 
 
 app.get('/', function(req, res) {
-   //response.send( fs.readFileSync('index.html').toString() );
    res.render('index.html');
    console.log(req.session);
 });
 
-app.get('/administration', function(request, response) {
-   //response.send( fs.readFileSync('administration.html').toString() );
-    response.render('administration.html');
+app.get('/administration', function(req, res) {
+    res.render('administration.html');
 });
 
 
@@ -44,7 +42,8 @@ app.get('/administration', function(request, response) {
 //The 404 Route (ALWAYS Keep this as the last route)
 // http://stackoverflow.com/questions/6528876/how-to-redirect-404-errors-to-a-page-in-expressjs
 app.get('*', function(req, res){
-  res.send("Error 404. We don't have this page.", 404);
+  res.status(404);
+  res.render('404.html');
 });
 
 var port = process.env.PORT || 8080; //5000;
