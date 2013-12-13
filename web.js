@@ -3,7 +3,7 @@ var fs = require('fs');
 var buf = require('buffer');
 var nunjucks = require('nunjucks')
 
-var core = require('./core.js')
+var core = require('./src/core.js')
 
 var app = express.createServer()
 

@@ -1,40 +1,46 @@
 var pg = require('pg');
 var bcrypt = require('bcrypt');
+var db = require('./db.js');
 
 
 addUser = function(name, email, phone, pass) {
-// TODO: do we really need to create new client every time?
+	// TODO: do we really need to create new client every time?
 
-var client = new pg.Client(process.env.DATABASE_URL);
+	var client = new pg.Client(process.env.DATABASE_URL);
 
-query = "INSERT INTO Users (Active, Name, email, Phone, password) \
-VALUES (1, '" + 
-name + "', '" + 
-email + "', '" + 
-phone + "', '" + 
-bcrypt.hashSync( pass, bcrypt.genSaltSync(12)) + 
-"'); ";
+	query = "INSERT INTO Users (Active, Name, email, Phone, password) \
+		VALUES (1, '" + 
+		name + "', '" + 
+		email + "', '" + 
+		phone + "', '" + 
+		bcrypt.hashSync( pass, 12) + 
+		"'); ";
 
-console.log(query);
+	console.log(query);
 
-client.connect(function(err) {
-  if(err) {
-    return console.error('could not connect to postgres: ', err);
-  }
-  client.query(query, 
-    function(err, result) {
-     if(err) {
-      return console.error('error running query: ', err);
-     }
-
-     //result.rows;
-     //console.log(resque.getZoneID(0,0));
-     client.end();
-    });
-});
-
+	dbAction(query, function(res) {});
 
 };
 
+verifyUser = function(email, pass) {
+        // TODO: do we really need to create new client every time?
+
+        var client = new pg.Client(process.env.DATABASE_URL);
+
+        query = "SELECT password FROM users  \
+		WHERE email = '" + email + "';";
+
+        console.log(query);
+
+        dbAction(query, function(res){
+		if(res.length > 0){
+			console.log(bcrypt.compareSync (pass, res[0].password));
+		}
+	});
+};
+
+
 
 //addUser("TestUser", "Tes@email", "phone", "pass");
+
+verifyUser("Tes@email", "pass");
