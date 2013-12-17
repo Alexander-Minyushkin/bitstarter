@@ -4,14 +4,22 @@ var buf = require('buffer');
 var nunjucks = require('nunjucks')
 
 var core = require('./src/core.js')
+var users = require('./src/users.js');
 
 var app = express.createServer()
+
+simplyLogError = function(err){if(err) console.log(err);}
 
 app.configure(function(){
 	// Authentication support
 	// http://habrahabr.ru/post/145970/
 	app.use(express.cookieParser());
-	app.use(express.session({ secret: process.env.SECRET} ));
+	app.use(express.bodyParser());
+	app.use(express.session({ 
+			secret: process.env.SECRET, 
+			cookie: { maxAge: 60000,
+				  authorized: false }} 
+		));
 	express.logger();
 });
 
@@ -30,11 +38,26 @@ app.get('/json-api/search', function(request, response) {
 
 app.get('/', function(req, res) {
    res.render('index.html');
+   req.session.reload(simplyLogError);
    console.log(req.session);
+   req.session.save(simplyLogError);
 });
 
 app.get('/administration', function(req, res) {
     res.render('administration.html');
+});
+
+
+app.post('/userlogin', function(req, res){
+
+console.log("userlogin:" + req.body);
+	var email = req.body.email;
+	var password = req.body.password;
+	req.session.cookie.authorized = verifyUser(email, password);
+	req.session.save(function(err){if(err) console.log(err);});
+
+
+	res.render('administration.html');
 });
 
 

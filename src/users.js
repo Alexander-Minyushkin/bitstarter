@@ -43,4 +43,4 @@ verifyUser = function(email, pass) {
 
 //addUser("TestUser", "Tes@email", "phone", "pass");
 
-verifyUser("Tes@email", "pass");
+//verifyUser("Tes@email", "pass");
