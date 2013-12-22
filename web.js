@@ -1,27 +1,49 @@
 var express = require('express');
 var fs = require('fs');
 var buf = require('buffer');
-var nunjucks = require('nunjucks')
+var nunjucks = require('nunjucks');
 
-var core = require('./src/core.js')
+var redis = require('redis');
+var url = require('url');
+var redisURL = url.parse(process.env.REDISCLOUD_URL);
+
+
+
+var client = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+client.auth(redisURL.auth.split(":")[1]);
+
+
+var connect = require('connect');
+var RedisStore = require('connect-redis')(express);
+
+var core = require('./src/core.js');
 var users = require('./src/users.js');
 
-var app = express.createServer()
+var app = express.createServer();
+//var app = express();
 
 simplyLogError = function(err){if(err) console.log(err);}
 
-app.configure(function(){
-	// Authentication support
-	// http://habrahabr.ru/post/145970/
-	app.use(express.cookieParser());
-	app.use(express.bodyParser());
-	app.use(express.session({ 
-			secret: process.env.SECRET, 
-			cookie: { maxAge: 60000,
-				  authorized: false }} 
-		));
-	express.logger();
-});
+
+                            
+// Authentication support
+// http://habrahabr.ru/post/145970/
+        
+app.use(express.cookieParser())
+.use(express.session({ 
+	store: new RedisStore({
+	host: redisURL.host.split(":")[0],
+	port: redisURL.port,
+	pass: redisURL.auth.split(":")[1],
+	db: redisURL.auth.split(":")[0]
+	}),
+	secret: process.env.SECRET,
+	proxy: true, 
+	cookie: { maxAge: 60*60*1000 }} 
+	))
+.use(express.bodyParser());
+express.logger();
+
 
 nunjucks.configure('views', {
     autoescape: true,
@@ -37,10 +59,13 @@ app.get('/json-api/search', function(request, response) {
 
 
 app.get('/', function(req, res) {
-   res.render('index.html');
-   req.session.reload(simplyLogError);
+   
+   //req.session.reload(simplyLogError);
+   
    console.log(req.session);
    req.session.save(simplyLogError);
+
+   res.render('index.html');
 });
 
 app.get('/administration', function(req, res) {
@@ -50,12 +75,14 @@ app.get('/administration', function(req, res) {
 
 app.post('/userlogin', function(req, res){
 
-console.log("userlogin:" + req.body);
+	console.log( req.body);
+
 	var email = req.body.email;
 	var password = req.body.password;
-	req.session.cookie.authorized = verifyUser(email, password);
-	req.session.save(function(err){if(err) console.log(err);});
-
+	req.session.authorized = verifyUser(email, password);
+	req.session.view = true;
+	req.session.save(simplyLogError);
+	console.log(req.session);
 
 	res.render('administration.html');
 });
