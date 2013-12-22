@@ -22,7 +22,7 @@ addUser = function(name, email, phone, pass) {
 
 };
 
-verifyUser = function(email, pass) {
+verifyUser = function(email, pass, callback) {
         // TODO: do we really need to create new client every time?
 
         var client = new pg.Client(process.env.DATABASE_URL);
@@ -34,7 +34,7 @@ verifyUser = function(email, pass) {
 
         dbAction(query, function(res){
 		if(res.length > 0){
-			console.log(bcrypt.compareSync (pass, res[0].password));
+			bcrypt.compare(pass, res[0].password, callback);
 		}
 	});
 };
@@ -43,4 +43,9 @@ verifyUser = function(email, pass) {
 
 //addUser("TestUser", "Tes@email", "phone", "pass");
 
-//verifyUser("Tes@email", "pass");
+/*verifyUser("Tes@email", "pass",
+	function(err, res) { 
+		if(err) console.log(err);
+		else console.log(res);
+	});
+*/

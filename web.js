@@ -79,11 +79,21 @@ app.post('/userlogin', function(req, res){
 
 	var email = req.body.email;
 	var password = req.body.password;
-	req.session.authorized = verifyUser(email, password);
-	req.session.view = true;
-	req.session.save(simplyLogError);
-	console.log(req.session);
+	verifyUser(email, password, 
+	function(err, res){
+		if(err) { 
+			console.log(err);
+			req.session.authorized = false;
+			}
+		else {
+			req.session.authorized = res;
+			req.session.email = email;
+			}
 
+		req.session.save(simplyLogError);
+		console.log(req.session);
+	});
+	
 	res.render('administration.html');
 });
 
