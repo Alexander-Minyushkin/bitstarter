@@ -3,6 +3,12 @@ var bcrypt = require('bcrypt');
 var db = require('./db.js');
 
 
+// TODO make proper protedtion from SQL injection
+escape = function(str){
+	return str.replace("'", "No quotes please")
+			.replace('"', 'No quotes please');
+}
+
 addUser = function(name, email, phone, pass) {
 	// TODO: do we really need to create new client every time?
 
@@ -28,7 +34,7 @@ verifyUser = function(email, pass, callback) {
         var client = new pg.Client(process.env.DATABASE_URL);
 
         query = "SELECT password FROM users  \
-		WHERE email = '" + email + "';";
+		WHERE email = '" + escape(email) + "';";
 
         console.log(query);
 
@@ -49,3 +55,6 @@ verifyUser = function(email, pass, callback) {
 		else console.log(res);
 	});
 */
+
+
+//console.log( escape('"sdfsdfsd@rere.com'));
