@@ -59,42 +59,49 @@ app.get('/json-api/search', function(request, response) {
 
 
 app.get('/', function(req, res) {
-   
-   //req.session.reload(simplyLogError);
-   
-   console.log(req.session);
+      
+//   console.log(req.session);
    req.session.save(simplyLogError);
 
    res.render('index.html');
 });
 
 app.get('/administration', function(req, res) {
-    res.render('administration.html');
+    res.render('administration.html',
+                                {email : req.session.email,
+                                 auth : req.session.authorized
+                                });
 });
 
+app.post('/userlogout', function(req, res){
+	req.session.destroy();
+	res.render('index.html');
+});
 
 app.post('/userlogin', function(req, res){
 
-	console.log( req.body);
+//	console.log( req.body);
 
 	var email = req.body.email;
 	var password = req.body.password;
 	verifyUser(email, password, 
-	function(err, res){
+	function(err, answer){
 		if(err) { 
 			console.log(err);
 			req.session.authorized = false;
 			}
 		else {
-			req.session.authorized = res;
+			req.session.authorized = answer;
 			req.session.email = email;
 			}
 
 		req.session.save(simplyLogError);
-		console.log(req.session);
+		//console.log(req.session);
+		res.render('administration.html', 
+				{email: req.session.email,
+				 auth: req.session.authorized
+				});
 	});
-	
-	res.render('administration.html');
 });
 
 
