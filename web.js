@@ -67,10 +67,29 @@ app.get('/', function(req, res) {
 });
 
 app.get('/administration', function(req, res) {
+
+//console.log( url.parse(req.url, true).query );
+
+	var id = url.parse(req.url, true).query.id;
+	var currentZone = null;
+	var activeZones = resque.getZoneID();
+
+
+	if ( id != null ){
+		var fZone = activeZones.filter(
+			function(z) {return z.id == id;});
+
+		if (fZone.length>0)
+			currentZone = fZone[0];
+	}
+	
     res.render('administration.html',
-                                {email : req.session.email,
-                                 auth : req.session.authorized
-                                });
+       {email : req.session.email,
+        auth : req.session.authorized,
+	zones: activeZones,
+	displayID: id,
+	z: currentZone
+       });
 });
 
 app.post('/userlogout', function(req, res){
@@ -99,7 +118,8 @@ app.post('/userlogin', function(req, res){
 		//console.log(req.session);
 		res.render('administration.html', 
 				{email: req.session.email,
-				 auth: req.session.authorized
+				 auth: req.session.authorized,
+				 zones: resque.getZoneID()
 				});
 	});
 });

@@ -48,7 +48,7 @@
 
 		{% if auth %}
 
-			You logged in as: {{ email }} <br>
+			You are logged in as: {{ email }} <br>
                 <form id="logoutform" action="userlogout" method="post">
                         <input type="submit" value="Logout"></input>
                 </form>
@@ -80,11 +80,37 @@
       <!-- http://placehold.it -->
       <div class="row-fluid section1">
         <div class="span5 offset1 asset">
-          <img class="img-polaroid" alt="Placeholder" src="http://placehold.it/480x300">
+		<h3>Active Operations</h3>
+		<ul>
+		{% for z in zones %}
+		<li> <a href="/administration?id={{ z.id }}">{{ z.name }} </a></li>
+		{% endfor %}
+		</ul>
+
         </div>
+
         <div class="span5 copy">
           <p>
-Some text
+		{% if displayID != null  %}
+			{% if auth %}
+			<form id="edit_zone">
+			<input type="text" name="name" value = "{{z.name}}"><br>
+			<input type="text" name="phone" value = "{{z.phone}}"><br>
+			</form>
+			<br>
+			<textarea rows = "10" cols="50" name = "descr" form="edit_zone">
+{{ z.descr }}
+			</textarea>
+			{% else %}
+			<h3> {{ z.name }} </h3>
+			<img src="{{z.img}}" alt="">
+Contact phone: {{ z.phone }} <br>
+{{ z.descr}}
+			{% endif%}
+		{% else %}
+
+		Currently we have {{ zones.length }} active operations.
+		{% endif %}
           </p>
         </div>
       </div>

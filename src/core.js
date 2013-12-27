@@ -31,3 +31,4 @@ resque.readFromDB = function() {
 
 resque.readFromDB();
 
+console.log( resque.operation.length);
