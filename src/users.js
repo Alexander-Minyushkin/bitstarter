@@ -17,7 +17,7 @@ addUser = function(name, email, phone, pass) {
 	query = "INSERT INTO Users (Active, Name, email, Phone, password) \
 		VALUES (1, '" + 
 		name + "', '" + 
-		email + "', '" + 
+		email.toLowerCase() + "', '" + 
 		phone + "', '" + 
 		bcrypt.hashSync( pass, 12) + 
 		"'); ";
@@ -34,7 +34,7 @@ verifyUser = function(email, pass, callback) {
         var client = new pg.Client(process.env.DATABASE_URL);
 
         query = "SELECT password FROM users  \
-		WHERE email = '" + escape(email) + "';";
+		WHERE email = '" + escape(email.toLowerCase()) + "';";
 
         console.log(query);
 
@@ -57,4 +57,4 @@ verifyUser = function(email, pass, callback) {
 */
 
 
-//console.log( escape('"sdfsdfsd@rere.com'));
+//console.log("TEsddfsdtertrESFKF9384573498".toLowerCase());

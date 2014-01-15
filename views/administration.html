@@ -93,17 +93,18 @@
           <p>
 		{% if displayID != null  %}
 			{% if auth %}
-			<form id="edit_zone">
+			<form id="edit_zone" action="save_zone" method="post">
 			<input type="text" name="name" value = "{{z.name}}"><br>
-			<input type="text" name="phone" value = "{{z.phone}}"><br>
-			</form>
-			<br>
-			<textarea rows = "10" cols="50" name = "descr" form="edit_zone">
+Phone: <input type="text" name="phone" value = "{{z.phone}}"><br>
+Image hotlink: <input type="text" name="img" value = "{{z.img}}"><br>
+			<textarea rows = "10" cols="100" name = "descr" form="edit_zone">
 {{ z.descr }}
-			</textarea>
+			</textarea><br>
+<input type="submit" value="Save"></input>
+</form>
 			{% else %}
-			<h3> {{ z.name }} </h3>
-			<img src="{{z.img}}" alt="">
+<h3> {{ z.name }} </h3>
+<img src="{{z.img}}" alt="">
 Contact phone: {{ z.phone }} <br>
 {{ z.descr}}
 			{% endif%}
