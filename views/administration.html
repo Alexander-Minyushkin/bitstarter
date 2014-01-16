@@ -94,7 +94,8 @@
 		{% if displayID != null  %}
 			{% if auth %}
 			<form id="edit_zone" action="save_zone" method="post">
-			<input type="text" name="name" value = "{{z.name}}"><br>
+<input type="hidden" name="id" value = "{{z.id}}">
+<input type="text" name="name" value = "{{z.name}}"><br>
 Phone: <input type="text" name="phone" value = "{{z.phone}}"><br>
 Image hotlink: <input type="text" name="img" value = "{{z.img}}"><br>
 			<textarea rows = "10" cols="100" name = "descr" form="edit_zone">

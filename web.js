@@ -18,6 +18,7 @@ var RedisStore = require('connect-redis')(express);
 
 var core = require('./src/core.js');
 var users = require('./src/users.js');
+var zones = require('./src/zones.js');
 
 var app = express.createServer();
 //var app = express();
@@ -122,6 +123,17 @@ app.post('/userlogin', function(req, res){
 				 zones: resque.getZoneID()
 				});
 	});
+});
+
+app.post('/save_zone', function(req, res){
+
+
+console.log(req.body);
+
+updateZone(	req.body, 
+		function() {
+			res.redirect('administration?id=' + req.body.id);
+		});
 });
 
 
