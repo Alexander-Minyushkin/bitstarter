@@ -24,9 +24,12 @@ resque.getZoneID = function(lat, lon) {
 
 // Read info about current operations from DB
 
-resque.readFromDB = function() {
+resque.readFromDB = function(callback) {
 	dbAction('SELECT * FROM operation  WHERE status=1',
-		function(res) { resque.operation = res});
+		function(res) { 
+			resque.operation = res;
+			if(callback) callback();
+		});
 }
 
 resque.readFromDB();

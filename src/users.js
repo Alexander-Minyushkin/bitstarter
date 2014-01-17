@@ -33,14 +33,17 @@ verifyUser = function(email, pass, callback) {
 
         var client = new pg.Client(process.env.DATABASE_URL);
 
-        query = "SELECT password FROM users  \
+        query = "SELECT password, id FROM users  \
 		WHERE email = '" + escape(email.toLowerCase()) + "';";
 
         console.log(query);
 
         dbAction(query, function(res){
 		if(res.length > 0){
-			bcrypt.compare(pass, res[0].password, callback);
+			bcrypt.compare(pass, res[0].password, 
+				function(err, ans) {
+					callback(err, ans, res[0].id);
+				});
 		}
 	});
 };

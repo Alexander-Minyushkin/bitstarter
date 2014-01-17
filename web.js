@@ -105,7 +105,7 @@ app.post('/userlogin', function(req, res){
 	var email = req.body.email;
 	var password = req.body.password;
 	verifyUser(email, password, 
-	function(err, answer){
+	function(err, answer, authorId){
 		if(err) { 
 			console.log(err);
 			req.session.authorized = false;
@@ -113,10 +113,11 @@ app.post('/userlogin', function(req, res){
 		else {
 			req.session.authorized = answer;
 			req.session.email = email;
+			req.session.authorId = authorId;
 			}
 
 		req.session.save(simplyLogError);
-		//console.log(req.session);
+		console.log(req.session);
 		res.render('administration.html', 
 				{email: req.session.email,
 				 auth: req.session.authorized,
@@ -126,12 +127,10 @@ app.post('/userlogin', function(req, res){
 });
 
 app.post('/save_zone', function(req, res){
-
-
-console.log(req.body);
+//console.log(req.body);
 
 updateZone(	req.body, 
-		function() {
+		function(x) {
 			res.redirect('administration?id=' + req.body.id);
 		});
 });
