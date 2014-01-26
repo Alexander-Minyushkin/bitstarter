@@ -6,11 +6,11 @@ updateZone = function(z, callback){
 
 //console.log(z.descr);
 	dbAction("UPDATE Operation SET " + 
-		" name='" + z.name + 
-		"', Phone = '" + z.phone +
-		"', Descr = '" + z.descr +
-		"', Img = '" + z.img +
-		"' WHERE id = " + z.id +";",
+		" name='" + escape(z.name) + 
+		"', Phone = '" + escape(z.phone) +
+		"', Descr = '" + escape(z.descr) +
+		"', Img = '" + escape(z.img) +
+		"' WHERE id = " + escape(z.id) +";",
 		function(x) { 
 			resque.readFromDB(callback); 			
 		});

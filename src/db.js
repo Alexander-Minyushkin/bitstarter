@@ -1,5 +1,11 @@
 var pg = require('pg');
 
+// TODO make proper protedtion from SQL injection
+escape = function(str){
+        return str.replace(/'/gi, "No quotes please")
+                        .replace('"', 'No quotes please');
+}
+
 
 dbAction = function(query, callback) {
 // TODO: do we really need to create new client every time?

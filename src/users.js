@@ -3,12 +3,6 @@ var bcrypt = require('bcrypt');
 var db = require('./db.js');
 
 
-// TODO make proper protedtion from SQL injection
-escape = function(str){
-	return str.replace("'", "No quotes please")
-			.replace('"', 'No quotes please');
-}
-
 addUser = function(name, email, phone, pass) {
 	// TODO: do we really need to create new client every time?
 
