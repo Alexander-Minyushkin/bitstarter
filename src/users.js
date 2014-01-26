@@ -16,8 +16,6 @@ addUser = function(name, email, phone, pass) {
 		bcrypt.hashSync( pass, 12) + 
 		"'); ";
 
-	console.log(query);
-
 	dbAction(query, function(res) {});
 
 };
@@ -39,6 +37,8 @@ verifyUser = function(email, pass, callback) {
 					callback(err, ans, res[0].id);
 				});
 		}
+		else 
+		callback("User verification failed:" + email + " " + pass);
 	});
 };
 

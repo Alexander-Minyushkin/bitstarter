@@ -10,6 +10,8 @@ escape = function(str){
 dbAction = function(query, callback) {
 // TODO: do we really need to create new client every time?
 
+console.log(query);
+
 var client = new pg.Client(process.env.DATABASE_URL);
 client.connect(function(err) {
   if(err) {

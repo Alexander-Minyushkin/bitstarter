@@ -51,9 +51,9 @@ nunjucks.configure('views', {
     express: app
 });
 
-
-setInterval( resque.readFromDB, 1000);
-
+resque.readFromDB(); // Initial upload of data 
+setInterval( resque.readFromDB, 10*1000);  // Regular upload of data
+ 
 app.get('/json-api/search', function(request, response) {
    response.send( resque.getZoneID(0, 0) );
 });
@@ -109,6 +109,7 @@ app.post('/userlogin', function(req, res){
 		if(err) { 
 			console.log(err);
 			req.session.authorized = false;
+			res.render('administration.html');
 			}
 		else {
 			req.session.authorized = answer;
@@ -135,7 +136,17 @@ updateZone(	req.body,
 		});
 });
 
+app.post('/new_zone', function(req, res){
 
+newZone( req.session, 
+	 function(x) {
+		resque.readFromDB(
+			function() {
+				res.redirect('administration?id=' + x[0].max);
+			}
+		);
+	});
+});
 
 //The 404 Route (ALWAYS Keep this as the last route)
 // http://stackoverflow.com/questions/6528876/how-to-redirect-404-errors-to-a-page-in-expressjs

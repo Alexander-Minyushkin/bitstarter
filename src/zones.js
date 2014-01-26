@@ -24,7 +24,7 @@ newZone = function(z, callback){
 		INSERT INTO Operation \
 		(status, authorId, name, lon_min, lon_max, \
 		lat_min, lat_max, Descr) \
-		VALUES (1, 1, 'Please provide name', 0, 180, \
+		VALUES (1, " + z.authorId + ", 'Please provide name', 0, 180, \
 		0, 90, 'Please describe operation'); \
 \
 		SELECT MAX(id) FROM Operation WHERE \
